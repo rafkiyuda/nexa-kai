@@ -44,7 +44,7 @@ const features = [
 
 export default function Features() {
     return (
-        <section id="features" className="py-24 bg-white dark:bg-black relative">
+        <section id="features" className="py-24 bg-[var(--background)] relative">
             <div className="container mx-auto px-6">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <motion.h2
@@ -59,7 +59,7 @@ export default function Features() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-gray-500 dark:text-gray-400"
+                        className="text-[var(--muted-foreground)]"
                     >
                         NEXA transforms your travel experience from chaotic to calm with intelligent features designed for the modern explorer.
                     </motion.p>
@@ -72,13 +72,13 @@ export default function Features() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className="bg-gray-50 dark:bg-neutral-900 p-8 rounded-3xl border border-gray-100 dark:border-neutral-800 hover:shadow-lg hover:-translate-y-1 transition-all group"
+                            className="bg-[var(--card)] p-8 rounded-3xl border border-[var(--border)] hover:shadow-lg hover:-translate-y-1 transition-all group"
                         >
                             <div className={`w-12 h-12 rounded-2xl ${feature.color} flex items-center justify-center mb-6 shadow-lg rotate-3 group-hover:rotate-6 transition-transform`}>
                                 {feature.icon}
                             </div>
                             <h3 className="text-xl font-bold mb-3 text-[var(--foreground)]">{feature.title}</h3>
-                            <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
+                            <p className="text-[var(--muted-foreground)] leading-relaxed text-sm">
                                 {feature.description}
                             </p>
                         </motion.div>

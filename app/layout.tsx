@@ -1,5 +1,6 @@
 import AIAssistant from "@/components/ai/AIAssistant";
 import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
@@ -24,9 +25,11 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <AIAssistant />
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <AIAssistant />
+        </ThemeProvider>
       </body>
     </html>
   );

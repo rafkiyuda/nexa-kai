@@ -9,7 +9,9 @@ export default function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const { messages, isLoading, sendMessage } = useGemini();
     const [input, setInput] = useState("");
+    const [isRecording, setIsRecording] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const recognitionRef = useRef<any>(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,6 +25,48 @@ export default function AIAssistant() {
         if (!input.trim()) return;
         sendMessage(input);
         setInput("");
+    };
+
+    const handleVoiceInput = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Speech recognition is not supported in your browser. Please use Chrome or Edge.');
+            return;
+        }
+
+        if (isRecording) {
+            recognitionRef.current?.stop();
+            setIsRecording(false);
+            return;
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'id-ID'; // Indonesian language, change to 'en-US' for English
+
+        recognition.onstart = () => {
+            setIsRecording(true);
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setInput(transcript);
+            setIsRecording(false);
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error('Speech recognition error:', event.error);
+            setIsRecording(false);
+        };
+
+        recognition.onend = () => {
+            setIsRecording(false);
+        };
+
+        recognition.start();
     };
 
     return (
@@ -52,7 +96,7 @@ export default function AIAssistant() {
                         initial={{ opacity: 0, y: 100, scale: 0.8 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 100, scale: 0.8 }}
-                        className="fixed bottom-6 right-6 z-50 w-[90vw] md:w-[400px] h-[600px] bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl flex flex-col font-[family-name:var(--font-outfit)] overflow-hidden border border-neutral-200 dark:border-neutral-800"
+                        className="fixed bottom-6 right-6 z-50 w-[90vw] md:w-[400px] h-[600px] bg-[var(--card)] rounded-3xl shadow-2xl flex flex-col font-[family-name:var(--font-outfit)] overflow-hidden border border-[var(--border)]"
                     >
                         {/* Header */}
                         <div className="p-4 bg-[var(--primary)] text-white flex justify-between items-center shrink-0">
@@ -71,7 +115,7 @@ export default function AIAssistant() {
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-black/50">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[var(--muted)]">
                             {messages.map((msg, idx) => (
                                 <motion.div
                                     key={idx}
@@ -81,8 +125,8 @@ export default function AIAssistant() {
                                 >
                                     <div
                                         className={`max-w-[80%] p-4 rounded-2xl ${msg.role === 'user'
-                                                ? 'bg-[var(--primary)] text-white rounded-br-none'
-                                                : 'bg-white dark:bg-neutral-800 text-[var(--foreground)] border border-gray-200 dark:border-neutral-700 rounded-bl-none shadow-sm'
+                                            ? 'bg-[var(--primary)] text-white rounded-br-none'
+                                            : 'bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] rounded-bl-none shadow-sm'
                                             }`}
                                     >
                                         <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -91,7 +135,7 @@ export default function AIAssistant() {
                             ))}
                             {isLoading && (
                                 <div className="flex justify-start">
-                                    <div className="bg-white dark:bg-neutral-800 p-4 rounded-2xl rounded-bl-none border border-gray-200 dark:border-neutral-700 shadow-sm flex gap-1 items-center">
+                                    <div className="bg-[var(--background)] p-4 rounded-2xl rounded-bl-none border border-[var(--border)] shadow-sm flex gap-1 items-center">
                                         <div className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce"></div>
                                         <div className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce delay-100"></div>
                                         <div className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce delay-200"></div>
@@ -102,9 +146,15 @@ export default function AIAssistant() {
                         </div>
 
                         {/* Input Area */}
-                        <div className="p-4 bg-white dark:bg-neutral-900 border-t border-gray-100 dark:border-neutral-800 shrink-0">
+                        <div className="p-4 bg-[var(--card)] border-t border-[var(--border)] shrink-0">
                             <div className="flex gap-2">
-                                <button className="p-3 text-[var(--primary)] hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-full transition-colors">
+                                <button
+                                    onClick={handleVoiceInput}
+                                    className={`p-3 rounded-full transition-colors ${isRecording
+                                        ? 'bg-red-500 text-white animate-pulse'
+                                        : 'text-[var(--primary)] hover:bg-[var(--muted)]'
+                                        }`}
+                                >
                                     <Mic size={20} />
                                 </button>
                                 <div className="flex-1 relative">
@@ -114,7 +164,7 @@ export default function AIAssistant() {
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                                         placeholder="Ask about trains, stations..."
-                                        className="w-full bg-gray-100 dark:bg-neutral-800 text-[var(--foreground)] rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] transition-all"
+                                        className="w-full bg-[var(--muted)] text-[var(--foreground)] rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] transition-all"
                                     />
                                 </div>
                                 <button

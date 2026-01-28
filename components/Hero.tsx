@@ -10,9 +10,9 @@ export default function Hero() {
 
     return (
         <>
-            <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[var(--background)] pt-20">
-                {/* Abstract Background with gradients */}
-                <div className="absolute inset-0 z-0">
+            <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[var(--background)] pt-32">
+                {/* Abstract Background with gradients - only show in dark mode */}
+                <div className="absolute inset-0 z-0 hidden dark:block">
                     <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] bg-[var(--primary)] rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob"></div>
                     <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] bg-[var(--secondary)] rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-2000"></div>
                 </div>
@@ -24,7 +24,7 @@ export default function Hero() {
                         transition={{ duration: 0.6 }}
                         className="mb-8 flex justify-center"
                     >
-                        <span className="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-[var(--primary)] rounded-full text-sm font-semibold border border-blue-100 dark:border-blue-800">
+                        <span className="px-4 py-2 bg-[var(--muted)] text-[var(--primary)] rounded-full text-sm font-semibold border border-[var(--border)]">
                             ✨ Redefining Travel with AI & Local Warmth
                         </span>
                     </motion.div>
@@ -43,7 +43,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+                        className="text-xl text-[var(--muted-foreground)] mb-10 max-w-2xl mx-auto leading-relaxed"
                     >
                         Let NEXA guide your journey home
                     </motion.p>
@@ -53,7 +53,7 @@ export default function Hero() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.25 }}
-                        className="mb-6"
+                        className="mb-6 flex justify-center"
                     >
                         <button
                             onClick={() => setIsScannerOpen(true)}
@@ -79,7 +79,7 @@ export default function Hero() {
                             </button>
                         </Link>
                         <Link href="/navigation">
-                            <button className="px-8 py-4 bg-white dark:bg-white/5 text-[var(--foreground)] text-lg font-semibold rounded-full border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-white/10 transition-all">
+                            <button className="px-8 py-4 bg-[var(--card)] text-[var(--foreground)] text-lg font-semibold rounded-full border border-[var(--border)] hover:bg-[var(--muted)] transition-all">
                                 View Station Map
                             </button>
                         </Link>
@@ -92,10 +92,10 @@ export default function Hero() {
                         transition={{ duration: 0.8, delay: 0.5 }}
                         className="mt-16 w-full max-w-5xl mx-auto"
                     >
-                        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-800 p-8 md:p-12">
-                            {/* Decorative background elements */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] rounded-full filter blur-3xl opacity-10"></div>
-                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--secondary)] rounded-full filter blur-3xl opacity-10"></div>
+                        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
+                            {/* Decorative background elements - only in dark mode */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] rounded-full filter blur-3xl opacity-10 hidden dark:block"></div>
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--secondary)] rounded-full filter blur-3xl opacity-10 hidden dark:block"></div>
 
                             {/* App Preview Image */}
                             <div className="relative z-10 flex justify-center">
@@ -105,20 +105,20 @@ export default function Hero() {
                                         alt="NEXA App Preview"
                                         className="w-full h-auto drop-shadow-2xl"
                                     />
-                                    {/* Glow effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/20 to-transparent rounded-3xl blur-xl"></div>
+                                    {/* Glow effect - only in dark mode */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/20 to-transparent rounded-3xl blur-xl hidden dark:block"></div>
                                 </div>
                             </div>
 
                             {/* Feature badges */}
                             <div className="relative z-10 mt-8 flex flex-wrap justify-center gap-3">
-                                <span className="px-4 py-2 bg-white dark:bg-neutral-800 rounded-full text-sm font-semibold text-gray-700 dark:text-gray-300 shadow-md">
+                                <span className="px-4 py-2 bg-[var(--background)] rounded-full text-sm font-semibold text-[var(--foreground)] shadow-md border border-[var(--border)]">
                                     🗺️ Real-time Navigation
                                 </span>
-                                <span className="px-4 py-2 bg-white dark:bg-neutral-800 rounded-full text-sm font-semibold text-gray-700 dark:text-gray-300 shadow-md">
+                                <span className="px-4 py-2 bg-[var(--background)] rounded-full text-sm font-semibold text-[var(--foreground)] shadow-md border border-[var(--border)]">
                                     🤖 AI Assistant
                                 </span>
-                                <span className="px-4 py-2 bg-white dark:bg-neutral-800 rounded-full text-sm font-semibold text-gray-700 dark:text-gray-300 shadow-md">
+                                <span className="px-4 py-2 bg-[var(--background)] rounded-full text-sm font-semibold text-[var(--foreground)] shadow-md border border-[var(--border)]">
                                     🎫 Smart Ticketing
                                 </span>
                             </div>

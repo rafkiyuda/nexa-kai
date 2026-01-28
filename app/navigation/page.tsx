@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { ArrowLeft, MapPin, Navigation as NavigationIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, MapPin, Navigation as NavigationIcon, Volume2, VolumeX } from 'lucide-react';
 import StationMapView from '@/components/map/StationMapView';
 
 // Mock POI data with distances
@@ -22,9 +22,48 @@ const pois = [
 export default function NavigationPage() {
     const [view, setView] = useState<'map' | 'list'>('map');
     const [selectedPOI, setSelectedPOI] = useState<typeof pois[0] | null>(null);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+
+    // Text-to-Speech function
+    const speakLocation = (poi: typeof pois[0]) => {
+        if ('speechSynthesis' in window) {
+            // Stop any ongoing speech
+            window.speechSynthesis.cancel();
+
+            if (isSpeaking) {
+                setIsSpeaking(false);
+                return;
+            }
+
+            const text = `Menuju ke ${poi.name}. Jarak ${poi.distance} meter. Perkiraan waktu ${poi.time} menit.`;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID'; // Indonesian language
+            utterance.rate = 0.9; // Slightly slower for clarity
+            utterance.pitch = 1.0;
+
+            utterance.onstart = () => setIsSpeaking(true);
+            utterance.onend = () => setIsSpeaking(false);
+            utterance.onerror = () => setIsSpeaking(false);
+
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert('Text-to-speech tidak didukung di browser Anda.');
+        }
+    };
+
+    // Auto-announce when location is selected
+    useEffect(() => {
+        if (selectedPOI) {
+            // Small delay to let UI update first
+            const timer = setTimeout(() => {
+                speakLocation(selectedPOI);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [selectedPOI]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[var(--primary)] to-blue-900 pt-4 px-4 pb-24">
+        <div className="min-h-screen bg-gradient-to-b from-[var(--primary)] to-blue-900 pt-28 px-4 pb-24">
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between text-white">
@@ -69,11 +108,11 @@ export default function NavigationPage() {
 
                 {/* Content Area */}
                 {view === 'map' ? (
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-2xl p-4">
+                    <div className="bg-[var(--background)] rounded-3xl overflow-hidden shadow-2xl p-4">
                         <StationMapView />
 
                         {/* POI Quick Access Below Map */}
-                        <div className="p-4 bg-gray-50 dark:bg-neutral-900">
+                        <div className="p-4 bg-[var(--card)]">
                             <h3 className="text-sm font-bold text-gray-500 mb-3">Lokasi Populer</h3>
                             <div className="grid grid-cols-4 gap-2">
                                 {pois.slice(0, 8).map((poi) => (
@@ -82,7 +121,7 @@ export default function NavigationPage() {
                                         onClick={() => setSelectedPOI(poi)}
                                         className={`p-3 rounded-2xl text-center transition-all ${selectedPOI?.id === poi.id
                                             ? 'bg-[var(--primary)] text-white shadow-lg scale-105'
-                                            : 'bg-white dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700'
+                                            : 'bg-[var(--background)] hover:bg-[var(--muted)]'
                                             }`}
                                     >
                                         <div className="text-2xl mb-1">{poi.icon}</div>
@@ -91,20 +130,36 @@ export default function NavigationPage() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Speaker Button - appears when location is selected */}
+                        {selectedPOI && (
+                            <div className="absolute bottom-4 right-4">
+                                <button
+                                    onClick={() => speakLocation(selectedPOI)}
+                                    className={`p-4 rounded-full shadow-lg transition-all ${isSpeaking
+                                        ? 'bg-[var(--secondary)] text-white animate-pulse'
+                                        : 'bg-white text-[var(--primary)] hover:bg-gray-100'
+                                        }`}
+                                    title={isSpeaking ? 'Hentikan panduan suara' : 'Putar panduan suara'}
+                                >
+                                    {isSpeaking ? <VolumeX size={24} /> : <Volume2 size={24} />}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
-                        <div className="divide-y divide-gray-100 dark:divide-neutral-800">
+                    <div className="bg-[var(--background)] rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="divide-y divide-[var(--border)]">
                             {pois.map((poi) => (
                                 <button
                                     key={poi.id}
                                     onClick={() => setSelectedPOI(poi)}
-                                    className={`w-full p-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-neutral-900 transition-all ${selectedPOI?.id === poi.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                                    className={`w-full p-4 flex items-center gap-4 hover:bg-[var(--muted)] transition-all ${selectedPOI?.id === poi.id ? 'bg-[var(--muted)]' : ''
                                         }`}
                                 >
                                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl ${selectedPOI?.id === poi.id
                                         ? 'bg-[var(--primary)] text-white'
-                                        : 'bg-gray-100 dark:bg-neutral-800'
+                                        : 'bg-[var(--muted)]'
                                         }`}>
                                         {poi.icon}
                                     </div>

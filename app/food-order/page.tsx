@@ -5,10 +5,12 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Plus, Minus, ShoppingCart, Clock, Star, ChefHat, Flame, Leaf } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import PaymentModal from '@/components/PaymentModal';
 
 export default function FoodOrderPage() {
     const [cart, setCart] = useState<{ [key: string]: number }>({});
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     const foodMenu = [
         {
@@ -225,8 +227,8 @@ export default function FoodOrderPage() {
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.id)}
                                 className={`px-6 py-2 rounded-full font-semibold whitespace-nowrap transition-all ${selectedCategory === cat.id
-                                        ? 'bg-orange-500 text-white shadow-lg'
-                                        : 'bg-[var(--muted)] text-[var(--foreground)] hover:bg-[var(--muted)]/70'
+                                    ? 'bg-orange-500 text-white shadow-lg'
+                                    : 'bg-[var(--muted)] text-[var(--foreground)] hover:bg-[var(--muted)]/70'
                                     }`}
                             >
                                 {cat.name}
@@ -347,10 +349,7 @@ export default function FoodOrderPage() {
                                 </div>
                             </div>
                             <button
-                                onClick={() => {
-                                    alert(`Pesanan berhasil!\n\nTotal: Rp ${getTotalPrice().toLocaleString('id-ID')}\nJumlah item: ${getTotalItems()}\n\nMakanan akan diantar ke:\nGerbong Eksekutif 2, Kursi 12A\n\nEstimasi waktu: 15-25 menit`);
-                                    setCart({});
-                                }}
+                                onClick={() => setShowPaymentModal(true)}
                                 className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2"
                             >
                                 Pesan Sekarang
@@ -360,6 +359,17 @@ export default function FoodOrderPage() {
                     </div>
                 </motion.div>
             )}
+
+            <PaymentModal
+                isOpen={showPaymentModal}
+                onClose={() => setShowPaymentModal(false)}
+                totalPrice={getTotalPrice()}
+                totalItems={getTotalItems()}
+                onSuccess={() => {
+                    setCart({});
+                    setShowPaymentModal(false);
+                }}
+            />
         </div>
     );
 }

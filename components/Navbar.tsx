@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, Sun, Moon } from 'lucide-react';
+import { useState } from 'react';
 import { useTheme } from './ThemeProvider';
 
 export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
         <motion.nav
@@ -16,7 +18,7 @@ export default function Navbar() {
             transition={{ duration: 0.8 }}
             className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6"
         >
-            <div className="bg-[var(--background)]/80 backdrop-blur-md border border-[var(--border)] rounded-full px-6 py-3 shadow-lg flex items-center gap-8 max-w-5xl w-[95%] justify-between md:justify-center">
+            <div className="bg-[var(--background)]/80 backdrop-blur-md border border-[var(--border)] rounded-full px-6 py-3 shadow-lg flex items-center gap-8 max-w-5xl w-[95%] justify-between md:justify-center relative">
 
                 {/* Logo */}
                 <Link href="/" className="font-bold text-xl tracking-tight text-[var(--primary)] flex items-center gap-2">
@@ -67,9 +69,35 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Menu Toggle */}
-                <button className="md:hidden p-2 text-gray-600 dark:text-gray-300">
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="md:hidden p-2 text-gray-600 dark:text-gray-300 relative z-50"
+                >
                     <Menu size={24} />
                 </button>
+
+                {/* Mobile Menu Overlay */}
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        className="absolute top-full left-0 right-0 mt-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-2xl md:hidden overflow-hidden"
+                    >
+                        <div className="flex flex-col gap-4">
+                            <Link href="/booking" className="text-lg font-medium text-[var(--foreground)] p-2 hover:bg-[var(--muted)] rounded-lg transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Booking</Link>
+                            <Link href="/navigation" className="text-lg font-medium text-[var(--foreground)] p-2 hover:bg-[var(--muted)] rounded-lg transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Navigation</Link>
+                            <Link href="/tourism" className="text-lg font-medium text-[var(--foreground)] p-2 hover:bg-[var(--muted)] rounded-lg transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Tourism</Link>
+                            <Link href="/train" className="text-lg font-medium text-[var(--foreground)] p-2 hover:bg-[var(--muted)] rounded-lg transition-colors" onClick={() => setIsMobileMenuOpen(false)}>On-Board</Link>
+                            <hr className="border-[var(--border)]" />
+                            <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
+                                <button className="w-full bg-[var(--primary)] text-white px-5 py-3 rounded-xl text-lg font-semibold hover:bg-opacity-90 transition shadow-md">
+                                    Book Ticket
+                                </button>
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
             </div>
         </motion.nav>
     );

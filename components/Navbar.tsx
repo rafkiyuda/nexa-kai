@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 
@@ -19,9 +20,13 @@ export default function Navbar() {
 
                 {/* Logo */}
                 <Link href="/" className="font-bold text-xl tracking-tight text-[var(--primary)] flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[var(--primary)] rounded-full flex items-center justify-center text-white">
-                        N
-                    </div>
+                    <Image
+                        src="/assets/logos/kai-logo.png"
+                        alt="NEXA Logo"
+                        width={50}
+                        height={50}
+                        className="object-contain"
+                    />
                     <span>NEXA</span>
                 </Link>
 

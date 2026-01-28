@@ -16,7 +16,7 @@ export default function Navbar() {
             transition={{ duration: 0.8 }}
             className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6"
         >
-            <div className="bg-[var(--background)]/80 backdrop-blur-md border border-[var(--border)] rounded-full px-6 py-3 shadow-lg flex items-center gap-8 max-w-2xl w-[90%] justify-between md:justify-center">
+            <div className="bg-[var(--background)]/80 backdrop-blur-md border border-[var(--border)] rounded-full px-6 py-3 shadow-lg flex items-center gap-8 max-w-5xl w-[95%] justify-between md:justify-center">
 
                 {/* Logo */}
                 <Link href="/" className="font-bold text-xl tracking-tight text-[var(--primary)] flex items-center gap-2">
@@ -34,6 +34,7 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
                     <Link href="/booking" className="hover:text-[var(--primary)] transition-colors">Booking</Link>
                     <Link href="/navigation" className="hover:text-[var(--primary)] transition-colors">Navigation</Link>
+                    <Link href="/tourism" className="hover:text-[var(--primary)] transition-colors">Tourism</Link>
                     <Link href="/train" className="hover:text-[var(--primary)] transition-colors">On-Board</Link>
                 </div>
 

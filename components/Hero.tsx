@@ -22,8 +22,15 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="mb-8 flex justify-center"
+                        className="mb-8 flex flex-col items-center gap-3"
                     >
+                        <div className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/50 backdrop-blur-md rounded-full border border-[var(--border)] shadow-sm">
+                            <span className="text-sm font-medium text-[var(--foreground)]">👋 Halo, Rafki</span>
+                            <span className="text-gray-300">|</span>
+                            <span className="text-sm font-medium text-[var(--primary)] flex items-center gap-1">
+                                📍 Stasiun Gambir
+                            </span>
+                        </div>
                         <span className="px-4 py-2 bg-[var(--muted)] text-[var(--primary)] rounded-full text-sm font-semibold border border-[var(--border)]">
                             ✨ Redefining Travel with AI & Local Warmth
                         </span>

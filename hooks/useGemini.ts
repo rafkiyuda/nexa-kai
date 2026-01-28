@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+
 
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
@@ -19,22 +19,20 @@ export const useGemini = () => {
         setIsLoading(true);
 
         try {
-            let replyText = "";
-            if (apiKey) {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-                const result = await model.generateContent(text);
-                const response = await result.response;
-                replyText = response.text();
-            } else {
-                // Mock behavior
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                replyText = "I'm currently in demo mode. I can help you find trains to Bandung or guide you to the nearest lounge.";
-                if (text.toLowerCase().includes('toilet')) replyText = "The nearest toilet is located on the 1st floor, near the North Entrance.";
-                if (text.toLowerCase().includes('train')) replyText = "I can help you with that. Where would you like to go?";
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: text }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
 
-            setMessages(prev => [...prev, { role: 'model', text: replyText }]);
+            const data = await response.json();
+            setMessages(prev => [...prev, { role: 'model', text: data.text }]);
         } catch (error) {
             console.error(error);
             setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the network tailored for you. Please try again." }]);

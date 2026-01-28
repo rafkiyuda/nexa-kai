@@ -24,7 +24,7 @@ export default function TrainPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 pt-32 px-4 md:px-8 pb-10">
+        <div className="min-h-screen bg-[var(--background)] pt-32 px-4 md:px-8 pb-10">
             <div className="max-w-4xl mx-auto">
                 {/* Trip Card Header */}
                 <motion.div
@@ -105,37 +105,41 @@ export default function TrainPage() {
 
                 {/* Primary Action Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer group"
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Navigation className="w-6 h-6" />
+                    <Link href="/navigation">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Navigation className="w-6 h-6" />
+                                </div>
+                                <ArrowRight className="w-5 h-5 opacity-75 group-hover:translate-x-1 transition-transform" />
                             </div>
-                            <ArrowRight className="w-5 h-5 opacity-75 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                        <h3 className="text-xl font-bold mb-1">Ke Peron 3</h3>
-                        <p className="text-sm text-blue-100">Navigasi ke platform keberangkatan</p>
-                    </motion.div>
+                            <h3 className="text-xl font-bold mb-1">Ke Peron 3</h3>
+                            <p className="text-sm text-blue-100">Navigasi ke platform keberangkatan</p>
+                        </motion.div>
+                    </Link>
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer group"
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <UtensilsCrossed className="w-6 h-6" />
+                    <Link href="/food-order">
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <UtensilsCrossed className="w-6 h-6" />
+                                </div>
+                                <ArrowRight className="w-5 h-5 opacity-75 group-hover:translate-x-1 transition-transform" />
                             </div>
-                            <ArrowRight className="w-5 h-5 opacity-75 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                        <h3 className="text-xl font-bold mb-1">Pesan Makanan</h3>
-                        <p className="text-sm text-orange-100">Pesan langsung ke kursi Anda</p>
-                    </motion.div>
+                            <h3 className="text-xl font-bold mb-1">Pesan Makanan</h3>
+                            <p className="text-sm text-orange-100">Lihat menu dan pesan sekarang</p>
+                        </motion.div>
+                    </Link>
                 </div>
 
                 {/* Facilities Section */}
@@ -287,6 +291,8 @@ export default function TrainPage() {
                         <p className="text-xs text-[var(--muted-foreground)]">Pesan Shuttle/Taxi</p>
                     </div>
                 </motion.div>
+
+
 
                 <div className="text-center pb-8">
                     <Link href="/" className="text-sm text-gray-400 hover:text-[var(--primary)] transition">
